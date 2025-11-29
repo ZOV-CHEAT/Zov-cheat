@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zov Executor - Наш инжектор для ПК</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c0c0c, #1a1a2e, #16213e);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00ff88;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-icon {
+            font-size: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #00ff88;
+        }
+
+        .hero {
+            margin-top: 120px;
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .hero h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00ff88, #00ccff, #ff0080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #00ff88; }
+            to { text-shadow: 0 0 30px #00ccff, 0 0 40px #ff0080; }
+        }
+
+        .hero p {
+            font-size: 1.4em;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .executor-image {
+            width: 700px;
+            height: 300px;
+            margin: 40px auto;
+            border-radius: 15px;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            padding: 3px;
+            animation: float 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.3);
+        }
+
+        .executor-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+            animation: shine 3s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .executor-image img {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+            filter: brightness(1.1) contrast(1.1);
+        }
+
+        .executor-image:hover img {
+            transform: scale(1.02);
+            filter: brightness(1.2) contrast(1.2) drop-shadow(0 0 10px #00ff88);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            color: black;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.5);
+        }
+
+        .version-info {
+            text-align: center;
+            margin: 60px 0;
+            font-size: 2em;
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 80px;
+            border-top: 2px solid #00ff88;
+        }
+
+        .virus-warning {
+            background: linear-gradient(45deg, #ff4444, #ff6b6b);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 10px 0;
+            display: inline-block;
+        }
+
+        .telegram-link {
+            color: #00ff88;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <span>Zov Executor</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#download">Скачать</a>
+                    <a href="https://t.me/antibrainrot_kidbot" target="_blank">Поддержка</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="hero">
+            <h1>ZOV EXECUTOR</h1>
+            <p>Патриотический инжектор для Windows 10/11</p>
+            
+            <div class="executor-image">
+                <img src="data:image/png;base64,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QwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIhBAMAAJAMIRgAAIBkCMEAAAAkQwgGAAAgGUIwAAAAyRCCAQAASIYQDAAAQDKEYAAAAJIh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" alt="ZOVCHEAT">
+            </div>
+
+            <button class="download-btn" onclick="downloadExecutor()">
+                ⬇️ СКАЧАТЬ ZOV EXECUTOR
+            </button>
+
+            <div class="version-info">
+                v5.2
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Это нн сайт</p>
+            <p>Для образовательных целей. Используйте на свой страх и риск.</p>
+            <a href="https://t.me/antibrainrot_kidbot" class="telegram-link" target="_blank">
+                💬 Поддержка: t.me/antibrainrot_kidbot
+            </a>
+        </div>
+    </footer>
+
+    <script src="Visit.js"></script>
+
+    <script>
+        function downloadExecutor() {
+            const link = document.createElement('a');
+            link.href = 'ZZZOOOOVVVV.zip';
+            link.download = 'ZZZOOOOVVVV.zip';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+
+</html>
