@@ -4,205 +4,283 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zov Executor - Наш инжектор для ПК</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        body {
-            background: linear-gradient(135deg, #0c0c0c, #1a1a2e, #16213e);
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+    body {
+        background: linear-gradient(135deg, #0c0c0c, #1a1a2e, #16213e);
+        color: white;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
 
+    .header {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 15px 0;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        border-bottom: 2px solid #00ff88;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: clamp(20px, 4vw, 28px);
+        font-weight: bold;
+        background: linear-gradient(45deg, #00ff88, #00ccff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .logo-icon {
+        font-size: clamp(24px, 5vw, 32px);
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+        font-size: clamp(14px, 3vw, 16px);
+    }
+
+    .nav-links a:hover {
+        color: #00ff88;
+    }
+
+    .hero {
+        margin-top: 100px;
+        text-align: center;
+        padding: 40px 0;
+    }
+
+    .hero h1 {
+        font-size: clamp(2.5em, 8vw, 4em);
+        margin-bottom: 15px;
+        background: linear-gradient(45deg, #00ff88, #00ccff, #ff0080);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: glow 2s ease-in-out infinite alternate;
+        line-height: 1.2;
+    }
+
+    @keyframes glow {
+        from { text-shadow: 0 0 20px #00ff88; }
+        to { text-shadow: 0 0 30px #00ccff, 0 0 40px #ff0080; }
+    }
+
+    .hero p {
+        font-size: clamp(1.1em, 3vw, 1.4em);
+        opacity: 0.9;
+        margin-bottom: 30px;
+        line-height: 1.4;
+    }
+
+    .executor-image {
+        width: min(700px, 90vw);
+        height: clamp(200px, 40vw, 300px);
+        margin: 30px auto;
+        border-radius: 15px;
+        background: linear-gradient(45deg, #00ff88, #00ccff);
+        padding: 3px;
+        animation: float 3s ease-in-out infinite;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0 50px rgba(0, 255, 136, 0.3);
+    }
+
+    .executor-image::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+        animation: shine 3s ease-in-out infinite;
+        z-index: 1;
+    }
+
+    .executor-image img {
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        object-fit: cover;
+        position: relative;
+        z-index: 2;
+        transition: all 0.3s ease;
+        filter: brightness(1.1) contrast(1.1);
+    }
+
+    .executor-image:hover img {
+        transform: scale(1.02);
+        filter: brightness(1.2) contrast(1.2) drop-shadow(0 0 10px #00ff88);
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .download-btn {
+        background: linear-gradient(45deg, #00ff88, #00ccff);
+        color: black;
+        border: none;
+        padding: clamp(15px, 4vw, 20px) clamp(30px, 8vw, 50px);
+        font-size: clamp(1.1em, 3vw, 1.3em);
+        font-weight: bold;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 15px 0;
+        box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        width: min(400px, 90%);
+    }
+
+    .download-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(0, 255, 136, 0.5);
+    }
+
+    .version-info {
+        text-align: center;
+        margin: 40px 0;
+        font-size: clamp(1.5em, 4vw, 2em);
+        color: #00ff88;
+        font-weight: bold;
+    }
+
+    .footer {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 30px 0;
+        text-align: center;
+        margin-top: 60px;
+        border-top: 2px solid #00ff88;
+    }
+
+    .footer p {
+        margin: 10px 0;
+        font-size: clamp(14px, 3vw, 16px);
+        line-height: 1.4;
+    }
+
+    .telegram-link {
+        color: #00ff88;
+        text-decoration: none;
+        font-weight: bold;
+        margin-top: 15px;
+        display: inline-block;
+        font-size: clamp(14px, 3vw, 16px);
+    }
+
+    /* Мобильные стили */
+    @media (max-width: 768px) {
         .header {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid #00ff88;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+            padding: 10px 0;
         }
 
         .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 28px;
-            font-weight: bold;
-            background: linear-gradient(45deg, #00ff88, #00ccff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo-icon {
-            font-size: 32px;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #00ff88;
+            gap: 15px;
+            justify-content: center;
         }
 
         .hero {
             margin-top: 120px;
-            text-align: center;
-            padding: 80px 0;
-        }
-
-        .hero h1 {
-            font-size: 4em;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #00ff88, #00ccff, #ff0080);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { text-shadow: 0 0 20px #00ff88; }
-            to { text-shadow: 0 0 30px #00ccff, 0 0 40px #ff0080; }
-        }
-
-        .hero p {
-            font-size: 1.4em;
-            opacity: 0.9;
-            margin-bottom: 40px;
+            padding: 20px 0;
         }
 
         .executor-image {
-            width: 700px;
-            height: 300px;
-            margin: 40px auto;
-            border-radius: 15px;
-            background: linear-gradient(45deg, #00ff88, #00ccff);
-            padding: 3px;
-            animation: float 3s ease-in-out infinite;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(0, 255, 136, 0.3);
-        }
-
-        .executor-image::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.1), transparent);
-            animation: shine 3s ease-in-out infinite;
-            z-index: 1;
-        }
-
-        .executor-image img {
-            width: 100%;
-            height: 100%;
-            border-radius: 12px;
-            object-fit: cover;
-            position: relative;
-            z-index: 2;
-            transition: all 0.3s ease;
-            filter: brightness(1.1) contrast(1.1);
-        }
-
-        .executor-image:hover img {
-            transform: scale(1.02);
-            filter: brightness(1.2) contrast(1.2) drop-shadow(0 0 10px #00ff88);
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            margin: 20px auto;
         }
 
         .download-btn {
-            background: linear-gradient(45deg, #00ff88, #00ccff);
-            color: black;
-            border: none;
-            padding: 20px 50px;
-            font-size: 1.3em;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 20px 0;
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
-        }
-
-        .download-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.5);
-        }
-
-        .version-info {
-            text-align: center;
-            margin: 60px 0;
-            font-size: 2em;
-            color: #00ff88;
-            font-weight: bold;
+            width: 90%;
+            margin: 10px auto;
         }
 
         .footer {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 40px 0;
-            text-align: center;
-            margin-top: 80px;
-            border-top: 2px solid #00ff88;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 0 10px;
         }
 
-        .virus-warning {
-            background: linear-gradient(45deg, #ff4444, #ff6b6b);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: bold;
-            margin: 10px 0;
-            display: inline-block;
+        .hero {
+            margin-top: 140px;
         }
 
-        .telegram-link {
-            color: #00ff88;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 20px;
-            display: inline-block;
+        .hero h1 {
+            font-size: 2em;
         }
-    </style>
+
+        .hero p {
+            font-size: 1em;
+        }
+
+        .executor-image {
+            height: 150px;
+        }
+
+        .download-btn {
+            padding: 12px 25px;
+            font-size: 1em;
+        }
+    }
+
+    /* Большие экраны */
+    @media (min-width: 1200px) {
+        .container {
+            max-width: 1400px;
+        }
+
+        .hero {
+            margin-top: 140px;
+            padding: 60px 0;
+        }
+    }
+</style>
 </head>
 <body>
     <header class="header">
@@ -265,3 +343,4 @@
 
 
 </html>
+
